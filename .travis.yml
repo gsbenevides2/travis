@@ -1,10 +1,10 @@
 language: node_js
 node_js:
- - node
  - lts/*
 jobs:
  include:
   - stage: Publish
+    script: skip
     script:
      - echo "skipping tests"
      - yarn global add expo-cli
