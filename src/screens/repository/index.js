@@ -1,90 +1,78 @@
 import React from 'react'
-import {Ionicons,MaterialCommunityIcons} from '@expo/vector-icons';
-
-import {connect} from 'react-redux'
-import axios from 'axios'
-
-import { handleBuildPassingColor} from '~/utils.js'
 import {
- Container,
- Card,
- CardTitle,
- CardStat,
- StatText,
- StatTextColor
-} from './styles'
+ RefreshControl,
+ DeviceEventEmitter
+} from 'react-native'
 
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+import CurrentBuild from './components/CurrentBuild'
+import {Container} from './styles'
+import { colorByBuildState} from '~/utils'
+import api from '~/services/api'
 
-function Screen(props){
+export default function Repository(props){
  const [data,setData] = React.useState(null)
+ const [loading,setLoading] = React.useState(false)
  const {id} = props.route.params
- console.log(id)
- function loadData(){
-	axios({
-	 method:'get',
-	 baseURL:`https://api.travis-ci.${props.type}`,
-	 url:`/build/${id}`,
-	 headers:{
-		'Travis-API-Version':3,
-		Authorization:`token ${props.token}`
-	 },
+ const [source] = React.useState(api.axios.CancelToken.source())
+
+ function loadData(calback){
+	setLoading(true)
+	api({
+	 url:`/repo/${id}`,
+	 cancelToken:source.token,
 	 params:{
-		/*include:'build.branch,build.commit,build.created_by,build.request,repository.current_build,repository.default_branch,repository.email_subscribed,owner.github_id,owner.installation',
-		limit:30,
-		sort_by:'current_build:desc',
-		'repository.active':true*/
+		include:'repository.current_build,build.created_by'
 	 }
 	}).then(response=>{
-	 const {data:responseData} = response
-	 //console.log(responseData)
-	 setData({
-		title:responseData.commit.message,
-		number:responseData.number,
-		state:responseData.state,
-		sha:responseData.commit.sha,
-		eventType:capitalizeFirstLetter(
-		 responseData.event_type.replace('_',' ')
-		),
-		branch:responseData.branch.name
-	 })
-	})
+	 const buildingStates = [
+		'created', 
+		'queued', 
+		'received', 
+		'started'
+	 ]
 
+	 setData(response.data)
+	 props.navigation.setOptions({
+		title:response.data.slug,
+		headerStyle:{
+		 backgroundColor:colorByBuildState(response.data.current_build.state)
+		},
+		headerTintColor:'#fff'
+	 })
+	 if(buildingStates.includes(response.data.current_build.state)){
+		loadData()
+	 }
+	 else{
+		setLoading(false)
+	 }
+	})
+	 .catch(e=>{
+		console.log('Axios error Repository',	e)
+	 })
  }
- React.useEffect(loadData,[])
+
+ React.useEffect(()=>{
+	async function load(){
+	 await api.setAuthData()
+	 loadData()
+	}
+	load()
+	DeviceEventEmitter.addListener('update',loadData)
+	return ()=>{
+	 DeviceEventEmitter.removeListener('update')
+	 source.cancel('Cancelled')
+	}
+ },[])
  return(
-	<Container>
-	 {data && <Card buildPassing={data.state}>
-		<CardTitle buildPassing={data.state}>
-		 {data.eventType}: {data.title.split('\n')[0]}
-		</CardTitle>
-		<CardStat>
-		 <Ionicons name='ios-git-commit' size={15} color={handleBuildPassingColor(data.state)}/> 
-		 <StatTextColor buildPassing={data.state}>
-			#{data.number} {data.state}
-		 </StatTextColor>
-		</CardStat>
-		<CardStat>
-		 <Ionicons name='ios-git-commit' size={15}/> 
-		 <StatText>Commit: {data.sha.slice(0,7)}</StatText>
-		</CardStat>
-		<CardStat>
-		 <MaterialCommunityIcons name='source-branch' size={15}/> 
-		 <StatText>Branch: {data.branch}</StatText>
-		</CardStat>
-		<CardStat>
-		 <MaterialCommunityIcons name='timer' size={15}/>
-		 <StatText>Ran for 53 sec</StatText>
-		</CardStat>
-		<CardStat>
-		 <MaterialCommunityIcons name='calendar' size={15}/>
-		 <StatText>About 2 hours ago</StatText>
-		</CardStat>
-	 </Card>}
-	</Container>
+	<Container
+	refreshControl={
+	 <RefreshControl 
+	 refreshing={loading} 
+	 onRefresh={loadData}/>}>
+	 { data && 
+		<CurrentBuild data={data.current_build}/>
+	 }
+	 </Container>
  )
 }
 
-export default connect(data=>data)(Screen)

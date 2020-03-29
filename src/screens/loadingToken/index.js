@@ -1,46 +1,34 @@
 import React from 'react';
-import {ScrollView,Image,AsyncStorage} from 'react-native';
-import { CommonActions} from '@react-navigation/native';
-
-import {connect} from 'react-redux'
-import appActions from '~/appActions' 
-import axios from 'axios'
-
+import {CommonActions} from '@react-navigation/native';
+import { SplashScreen } from 'expo';
+import api from '~/services/api'
 import {Container,Spinner} from './styles'
 
-function Screen(props){
+export default function(props){
 
  React.useEffect(()=>{
 	async function loadCredentials(){
-	 const token = await AsyncStorage.getItem('token')
-	 const type = await AsyncStorage.getItem('type')
+	 const {type,token} = await api.getAuthData()
 	 if(token && type){
-		axios({
-		 method:'get',
-		 baseURL:`https://api.travis-ci.${type}`,
-		 url:'/repos',
-		 headers:{
-			'Travis-API-Version':3,
-			Authorization:`token ${token}`
-		 }
-		})
+	 api.reauthenticate() 
 		 .then(()=>{
-			props.dispatch(appActions.setToken(token))
-			props.dispatch(appActions.setType(type))
 			props.navigation
 			 .dispatch(CommonActions.reset(
 				{
 				 index: 1,
-				 routes: [{ name: 'repositories'}]
+				 routes: [{ name: 'app'}]
 				}));
+			setTimeout(SplashScreen.hide,10)
 		 })
-		 .catch(()=>{
+		 .catch(err=>{
+			console.log(err.request)
 			props.navigation
 			 .dispatch(CommonActions.reset(
 				{
 				 index: 1,
 				 routes: [{ name: 'selectAccountType'}]
 				}));
+			setTimeout(SplashScreen.hide,10)
 		 })
 	 }
 	 else{
@@ -50,7 +38,7 @@ function Screen(props){
 			 index: 1,
 			 routes: [{ name: 'selectAccountType'}]
 			}));
-
+			setTimeout(SplashScreen.hide,10)
 	 }
 	}
 	loadCredentials()
@@ -62,4 +50,3 @@ function Screen(props){
  )
 }
 
-export default connect(data=>data)(Screen)

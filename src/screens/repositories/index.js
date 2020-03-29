@@ -1,24 +1,25 @@
 import React from 'react'
-import {RefreshControl} from 'react-native'
-import {Container} from './styles'
-import Repository from '~/components/repository'
+import {RefreshControl,DeviceEventEmitter} from 'react-native'
+import {Container,List,Image,Text} from './styles'
+import RepositoryItem from '~/components/repositoryItem'
 
-import {connect} from 'react-redux'
-import axios from 'axios'
+import api from '~/services/api'
 
-function Screen(props){
- const [repos,setRepos] = React.useState([])
+import emptyImage from '~/assents/empty.png'
+import loadingImage from '~/assents/loading.png'
+
+export default function(props){
+ const [repos,setRepos] = React.useState(null)
  const [loading,setLoad] = React.useState(true)
- function loadRepos(){
+ const [source,setSource] = React.useState(null)
+
+ function loadData(){
 	setLoad(true)
-	axios({
-	 method:'get',
-	 baseURL:`https://api.travis-ci.${props.type}`,
+	const source = api.axios.CancelToken.source()
+	setSource(source)
+	api({
 	 url:'/repos',
-	 headers:{
-		'Travis-API-Version':3,
-		Authorization:`token ${props.token}`
-	 },
+	 cancelToken:source.token,
 	 params:{
 		include:'build.branch,build.commit,build.created_by,build.request,repository.current_build,repository.default_branch,repository.email_subscribed,owner.github_id,owner.installation',
 		limit:30,
@@ -27,37 +28,77 @@ function Screen(props){
 	 }
 	})
 	 .then(response=>{
-		const repos = response.data.repositories.map(repo=>{
-		 const build = repo.current_build || {}
-		 return{
-			id:repo.id,
-			slug:repo.slug,
-			number:build.number,
-			duration:build.duration,
-			finished_at:build.finished_at,
-			state:build.state,
-			buildId:build.id
-		 }
+		const {repositories} = response.data
+		setRepos(repositories)
+		const buildingRepo = repositories.some(repo=>{
+		 const buildingStates = [
+			'created', 
+			'queued', 
+			'received', 
+			'started'
+		 ]
+		 return buildingStates.includes(
+			repo.current_build.state
+		 )
 		})
-	setLoad(false)
-		setRepos(repos)
+		if(buildingRepo){
+		 loadData()
+		}
+		else{
+		 setLoad(false)
+		}
 	 })
+	 .catch(e=>{
+		console.log('Axios Error Repositories',e)
+		setLoad(false)
+	 })
+ }
+ function handleRepositoryClick(id){
+	props.navigation
+	 .navigate('repository',{id})
+ }
 
+
+ React.useEffect(()=>{
+	async function load(){
+	 await api.setAuthData()
+	 loadData()
+	}
+	load()
+	DeviceEventEmitter.addListener('update',loadData)
+	return ()=>{
+	 DeviceEventEmitter.removeListener('update')
+	 if(source) source.cancel('Canceled')
+	}
+ },[])
+
+ if(repos){
+	if(repos.length){
+	 return(
+		<List
+		refreshControl={
+		 <RefreshControl refreshing={loading} onRefresh={loadData}/>}
+		 data={repos}
+		 renderItem={({item})=>(
+			<RepositoryItem onPress={()=>handleRepositoryClick(item.id)} data={item}/>)}
+			keyExtractor={item => item.id.toString()}/>
+	 )
+	}
+	else{
+	 return (
+		<Container>
+		 <Image source={emptyImage}/>
+		 <Text>No active repositories</Text>
+		</Container>
+	 )
+	}
  }
- React.useEffect(loadRepos,[])
- return(
-	<Container
-	refreshControl={
-	 <RefreshControl refreshing={loading} onRefresh={loadRepos}/>
-	 }
-	>{
-	 repos.map(repo=>(
-		<Repository onPress={()=>{
-		 props.navigation.navigate('repository',{id:repo.buildId})
-		}} key={repo.id} data={repo}/>))
-	}</Container>
- )
+ else{
+	 return (
+		<Container>
+		 <Image source={loadingImage}/>
+		 <Text>Loading...</Text>
+		</Container>
+	 )
  }
- export default connect(
- (data)=>(data)
- )(Screen)
+}

@@ -3,9 +3,7 @@ import {Image,View} from 'react-native';
 import { CommonActions} from '@react-navigation/native';
 import {TextInput,Button,HelperText} from 'react-native-paper'
 
-import {connect} from 'react-redux'
-import appActions from '~/appActions' 
-import axios from 'axios'
+import api from '~/services/api'
 
 import {
  Container,
@@ -33,7 +31,7 @@ const textInputOptions = {
  autoCorrect:false
 }
 
-function Screen(props) {
+export default function(props) {
  const inputRef = React.useRef(null)
  const [token,setToken] = React.useState('')
  const [error,setError] = React.useState(null)
@@ -41,56 +39,43 @@ function Screen(props) {
 
  function login(){
 	inputRef.current.blur()
-	axios({
-	 method:'get',
-	 baseURL:`https://api.travis-ci.${type}`,
-	 url:'/repos',
-	 headers:{
-		'Travis-API-Version':3,
-		Authorization:`token ${token}`
-	 }
-	})
+	api.authenticate(type,token)
 	 .then(()=>{
-		props.dispatch(appActions.setToken(token))
-		props.dispatch(appActions.setType(type))
 		props.navigation
 		 .dispatch(CommonActions.reset(
 			{
 			 index: 1,
-			 routes: [{ name: 'repositories'}]
+			 routes: [{ name: 'app'}]
 			}));
 	 })
-	 .catch(error=>{
-		inputRef.current.focus()
-		if(error.response?.status===403) setError('Api key invalid!')
-		else{
-		 console.log(error)	
-		}
-	 })
- }
+		.catch(error=>{
+		 inputRef.current.focus()
+		 if(error.response?.status===403) setError('Api key invalid!')
+		 else{
+			console.log(error)	
+		 }
+		})
+	}
 
- return (
-	<Container behavior="padding" enabled>
-	 <Image style={LogoStyle} source={types[type].image}/>
-	 <Title>{types[type].text}</Title>
-	 <TextInput 
-	 style={InputStyle}
-	 value={token}
-	 error={error}
-	 ref={inputRef}
-	 onChangeText={text=>{
-		setToken(text)
-		setError(null)
-	 }}
-	 {...textInputOptions}/>
-	 <HelperText
-	 type='error'
-	 style={HelperStyle}
-	 visible={error}>{error}</HelperText>
-	<Button mode="contained" onPress={login}>Log In</Button>
- </Container>
- );
-}
-export default connect(
- (data)=>(data)
-)(Screen)
+	return (
+	 <Container behavior="padding" enabled>
+		<Image style={LogoStyle} source={types[type].image}/>
+		<Title>{types[type].text}</Title>
+		<TextInput 
+		style={InputStyle}
+		value={token}
+		error={error}
+		ref={inputRef}
+		onChangeText={text=>{
+		 setToken(text)
+		 setError(null)
+		}}
+		{...textInputOptions}/>
+		<HelperText
+		type='error'
+		style={HelperStyle}
+		visible={error}>{error}</HelperText>
+	 <Button mode="contained" onPress={login}>Log In</Button>
+	</Container>
+	);
+ }
