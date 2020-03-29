@@ -4,8 +4,9 @@ node_js:
  - lts/*
 jobs:
  include:
-  - stage: deploy
+  - stage: Publish
     script:
+     - echo "skipping tests"
      - yarn global add expo-cli
      - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
      - expo publish --non-interactive
