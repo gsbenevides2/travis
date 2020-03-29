@@ -1,8 +1,7 @@
 import React from 'react';
 import { DefaultTheme,Provider as PaperProvider } from 'react-native-paper';
 import Routes from './src/routes';
-import { SplashScreen } from 'expo';
-SplashScreen.preventAutoHide()
+
 const theme = {
  ...DefaultTheme,
  roundness: 2,
@@ -12,7 +11,6 @@ const theme = {
 	accent: '#05C47A',
  },
 };
-//console.disableYellowBox = true
 export default function App() {
 
  return (

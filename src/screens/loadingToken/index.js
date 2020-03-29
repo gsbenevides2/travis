@@ -1,6 +1,5 @@
 import React from 'react';
 import {CommonActions} from '@react-navigation/native';
-import { SplashScreen } from 'expo';
 import api from '~/services/api'
 import {Container,Spinner} from './styles'
 
@@ -18,7 +17,6 @@ export default function(props){
 				 index: 1,
 				 routes: [{ name: 'app'}]
 				}));
-			setTimeout(SplashScreen.hide,10)
 		 })
 		 .catch(err=>{
 			console.log(err.request)
@@ -28,7 +26,6 @@ export default function(props){
 				 index: 1,
 				 routes: [{ name: 'selectAccountType'}]
 				}));
-			setTimeout(SplashScreen.hide,10)
 		 })
 	 }
 	 else{
@@ -38,7 +35,6 @@ export default function(props){
 			 index: 1,
 			 routes: [{ name: 'selectAccountType'}]
 			}));
-			setTimeout(SplashScreen.hide,10)
 	 }
 	}
 	loadCredentials()

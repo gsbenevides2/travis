@@ -9,7 +9,7 @@
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -24,7 +24,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gsbenevides2.travis",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.gsbenevides2.travis",
+      "versionCode": 1
     }
   }
 }
