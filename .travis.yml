@@ -5,6 +5,7 @@ jobs:
  include:
   - stage: Publish
     script: skip
+    if: branch = master
     script:
      - echo "skipping tests"
      - yarn global add expo-cli
