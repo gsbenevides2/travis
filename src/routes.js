@@ -44,13 +44,10 @@ export default function(){
 		 headerRight:()=>(
 			<IconButton 
 			icon='help-circle-outline'
-			style={{
-			 color:'#fff'
-			}}
 			onPress={()=>{
 			 openBrowserAsync('https://github.com/gsbenevides2/travis/wiki/How-to-get-the-API-token%3F')
 			}}
-			size={30}		
+			size={25}		
 		 />
 		 )
 		}}

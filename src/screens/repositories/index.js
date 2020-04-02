@@ -56,8 +56,8 @@ export default function(props){
  function handleRepositoryClick(id){
 	props.navigation
 	 .navigate('repository',{id})
+	if(source) source.cancel('Canceled')
  }
-
 
  React.useEffect(()=>{
 	async function load(){
@@ -65,8 +65,22 @@ export default function(props){
 	 loadData()
 	}
 	load()
-	DeviceEventEmitter.addListener('update',loadData)
+
+	const unsubscribeToFocus = props
+	 .navigation
+	 .addListener('focus', () => {
+		loadData()
+	 });
+
+	const unsubscribeToBlur = props
+	 .navigation
+	 .addListener('blur', () => {
+	 if(source) source.cancel('Canceled')
+	 });
+
 	return ()=>{
+	 unsubscribeToFocus()
+	 unsubscribeToBlur()
 	 DeviceEventEmitter.removeListener('update')
 	 if(source) source.cancel('Canceled')
 	}
@@ -94,11 +108,11 @@ export default function(props){
 	}
  }
  else{
-	 return (
-		<Container>
-		 <Image source={loadingImage}/>
-		 <Text>Loading...</Text>
-		</Container>
-	 )
+	return (
+	 <Container>
+		<Image source={loadingImage}/>
+		<Text>Loading...</Text>
+	 </Container>
+	)
  }
 }
