@@ -49,10 +49,13 @@ function Job(props){
 	}
  }
  async function restartJob(){
+	const {state} = data
 	await api.setAuthData()
-	api.post(`/job/${data.id}/${states.running.includes(data.state)?'cancel':'restart'}`)
+	api.post(`/job/${data.id}/${states.running.includes(state)?'cancel':'restart'}`)
 	 .then(()=>{
-		DeviceEventEmitter.emit('update')
+		if(!states.running.includes(state)){
+		 DeviceEventEmitter.emit('update')
+		}
 	 })
  }
  return (
@@ -74,8 +77,8 @@ function Job(props){
 		 <RestartButton 
 		 icon={states.running.includes(data.state)? 'close':'reload1'}
 		 onPress={restartJob}/>
-	 </ButtonArea>
-	</Container>
+		</ButtonArea>
+	 </Container>
  )
 }
 

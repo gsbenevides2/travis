@@ -16,9 +16,10 @@ export default function Repository(props){
  const [data,setData] = React.useState(null)
  const [loading,setLoading] = React.useState(false)
  const {id} = props.route.params
- const [source] = React.useState(api.axios.CancelToken.source())
- console.log(id)
+ const [source,setSource] = React.useState(null)
  function loadData(calback){
+	const source = api.axios.CancelToken.source()
+	setSource(source)
 	setLoading(true)
 	api({
 	 url:`/repo/${id}`,
@@ -70,10 +71,22 @@ export default function Repository(props){
 	 loadData()
 	}
 	load()
+	const unsubscribeToBlur = props
+	 .navigation
+	 .addListener('blur', () => {
+		if(source){
+		 source.cancel('Canceled')
+		}
+	 });
+
 	DeviceEventEmitter.addListener('update',loadData)
 	return ()=>{
+	 console.log('OK')
+	 unsubscribeToBlur()
 	 DeviceEventEmitter.removeListener('update')
-	 source.cancel('Cancelled')
+	 if(source){
+		source.cancel('Cancelled')
+	 }
 	}
  },[])
  return(

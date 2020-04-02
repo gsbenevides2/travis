@@ -65,7 +65,7 @@ export default function(props){
 	 loadData()
 	}
 	load()
-
+	console.log('Ok')
 	const unsubscribeToFocus = props
 	 .navigation
 	 .addListener('focus', () => {
@@ -75,13 +75,14 @@ export default function(props){
 	const unsubscribeToBlur = props
 	 .navigation
 	 .addListener('blur', () => {
-	 if(source) source.cancel('Canceled')
+		 if(source){
+			source.cancel('Canceled')
+		}
 	 });
 
 	return ()=>{
 	 unsubscribeToFocus()
 	 unsubscribeToBlur()
-	 DeviceEventEmitter.removeListener('update')
 	 if(source) source.cancel('Canceled')
 	}
  },[])
