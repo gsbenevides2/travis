@@ -1,5 +1,7 @@
 import React from 'react';
 import { CommonActions} from '@react-navigation/native';
+import Constants from 'expo-constants'
+import {openBrowserAsync} from 'expo-web-browser';
 import {
  List,
  Portal,
@@ -14,7 +16,10 @@ import {
  Avatar,
  TextData,
  BoldText,
- Text
+ Text,
+ AppData,
+ OpenSource,	
+ Version
 } from './styles'
 
 import api from '~/services/api'
@@ -40,7 +45,9 @@ export default function SettingsScreen(props){
 		}));
 
  }
-
+ function openWiki(){
+	openBrowserAsync('https://github.com/gsbenevides2/travis/wiki')
+ }
  React.useEffect(()=>{
 	async function load(){
 	 await api.setAuthData()
@@ -48,8 +55,6 @@ export default function SettingsScreen(props){
 	}
 	load()
  },[])
-
-
  if(data){
 	return(
 	 <Container>
@@ -67,6 +72,15 @@ export default function SettingsScreen(props){
 		description='Click to sign out of your Travis account.'
 		left={props=>(<List.Icon {...props} icon='logout-variant'/>)}
 		onPress={()=>setShowDialog(true)}/>
+		<List.Item
+		title='Help'
+		description='Help Wiki.'
+		left={props=>(<List.Icon {...props} icon='help-circle'/>)}
+	  onPress={openWiki}/>
+		<AppData>
+		 <OpenSource />
+		 <Version>Version {Constants.manifest.version}</Version>
+		</AppData>
 		<Portal>
 		 <Dialog 
 		 onDismiss={()=>setShowDialog(false)}

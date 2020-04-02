@@ -4,12 +4,10 @@ import {
 } from '@expo/vector-icons'
 import styled from 'styled-components'
 
-import { colorByBuildState} from '~/utils'
-
 export const Container = styled.View`
  backgroundColor:#fff;
  borderLeftWidth:10px;
- borderLeftColor:${props=>colorByBuildState(props.state)};
+ borderLeftColor:${props=>props.color};
  paddingTop:10px;
  paddingLeft:5px;
 `
@@ -31,7 +29,7 @@ export const Line = styled.View`
 export const SuperMaterialCommunityIcon = styled(MaterialCommunityIcons)
  .attrs(props=>({
 	size:20,
-	color:colorByBuildState(props.state)
+	color:props.color
  }))``
 export const MaterialCommunityIcon = styled(MaterialCommunityIcons).
  attrs({
@@ -40,7 +38,7 @@ export const MaterialCommunityIcon = styled(MaterialCommunityIcons).
 export const SuperIonicon = styled(Ionicons)
  .attrs(props=>({
 	size:20,
-	color:colorByBuildState(props.state)
+	color:props.color
  }))``
 export const Ionicon = styled(Ionicons)
  .attrs({
@@ -48,12 +46,12 @@ export const Ionicon = styled(Ionicons)
  })``
 
 export const BoldInfo = styled.Text`
- color:${props=>colorByBuildState(props.state)};
+ color:${props=>props.color};
  fontWeight:bold;
  marginLeft:10px;
 `
 export const SuperText = styled.Text`
- color:${props=>colorByBuildState(props.state)};
+ color:${props=>props.color};
  marginLeft:10px;
 `
 export const Text = styled.Text`

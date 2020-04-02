@@ -21,10 +21,12 @@ module.exports.getAuthData = async ()=>{
  const data = await AsyncStorage.multiGet(
 	['type','token']
  )
- return {
+ const authData = {
 	type:data[0][1],
 	token:data[1][1]
  }
+ module.exports.authData = authData
+ return authData
 }
 
 module.exports.authenticate = (type,token)=>{

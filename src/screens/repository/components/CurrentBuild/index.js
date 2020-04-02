@@ -25,8 +25,12 @@ import {
 
  Button
 }from './styles'
-
+import {
+ states
+} from '~/utils'
 export default function CurrentBuild({data}) {
+ const color = states.colors[data.state]
+ const icon = states.icons[data.state]
  let  boldInfo = '--'
  let title = '--'
  if(data.event_type === 'push'){
@@ -87,11 +91,13 @@ let formatedDuration = '-'
 	 })
  }
  return (
-	<Container state={data.state}>
+	<Container color={color}>
 	 <FirstLine>
-		<SuperMaterialCommunityIcon state={data.state}  name='cancel'/>
-		<BoldInfo state={data.state}>{boldInfo}</BoldInfo>
-		<SuperText state={data.state}>{title}</SuperText>
+		<SuperMaterialCommunityIcon 
+		color={color}  
+		name={icon}/>
+		<BoldInfo color={color}>{boldInfo}</BoldInfo>
+		<SuperText color={color}>{title}</SuperText>
 	 </FirstLine>
 	 <Content>
 		<ContentBlock>
@@ -118,8 +124,8 @@ let formatedDuration = '-'
 	 </ContentBlock>
 	 <ContentBlock>
 		<Line>
-		 <SuperIonicon state={data.state} name='ios-git-pull-request'/>
-		 <SuperText state={data.state}> #{data.number} {data.state}</SuperText>
+		 <SuperIonicon color={color} name='ios-git-pull-request'/>
+		 <SuperText color={color}> #{data.number} {data.state}</SuperText>
 		</Line>
 	 </ContentBlock>
 	 <ContentBlock>

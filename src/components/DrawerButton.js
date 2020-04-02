@@ -5,10 +5,8 @@ export default function DrawerButton({navigation,color}){
  return (
 	<IconButton
 	icon="menu"
-	style={{
-	 color:`${color}`,
-	}}
-	size={30} 
+	color={color}
+	size={25} 
 	onPress={()=>
 		setTimeout(navigation.toggleDrawer,10)
 	} />

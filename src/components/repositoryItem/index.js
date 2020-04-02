@@ -9,13 +9,13 @@ import {
 import moment from 'moment'
 
 import {
- colorByBuildState,
+ states,
 } from '~/utils'
 
 export default function({data ,onPress}){
  const {current_build} = data
  const {state} = current_build
- const color = colorByBuildState(state)
+ const color =  states.colors[state]
 
  let formatedDuration = '-'
  if(state === 'started')	{
