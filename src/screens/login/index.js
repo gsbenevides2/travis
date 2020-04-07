@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image,View} from 'react-native';
+import {Image,View,StatusBar} from 'react-native';
 import { CommonActions} from '@react-navigation/native';
 import {TextInput,Button,HelperText} from 'react-native-paper'
 
@@ -48,34 +48,37 @@ export default function(props) {
 			 routes: [{ name: 'app'}]
 			}));
 	 })
-		.catch(error=>{
-		 inputRef.current.focus()
-		 if(error.response?.status===403) setError('Api key invalid!')
-		 else{
-			console.log(error)	
-		 }
-		})
-	}
-
-	return (
-	 <Container behavior="padding" enabled>
-		<Image style={LogoStyle} source={types[type].image}/>
-		<Title>{types[type].text}</Title>
-		<TextInput 
-		style={InputStyle}
-		value={token}
-		error={error}
-		ref={inputRef}
-		onChangeText={text=>{
-		 setToken(text)
-		 setError(null)
-		}}
-		{...textInputOptions}/>
-		<HelperText
-		type='error'
-		style={HelperStyle}
-		visible={error}>{error}</HelperText>
-	 <Button mode="contained" onPress={login}>Log In</Button>
-	</Container>
-	);
+	 .catch(error=>{
+		inputRef.current.focus()
+		if(error.response?.status===403) setError('Api key invalid!')
+		else{
+		 console.log(error)	
+		}
+	 })
  }
+
+ return (
+	<Container behavior="padding" enabled>
+	 <StatusBar 
+	 backgroundColor='#ffffff'
+	 barStyle='dark-content'/>
+	 <Image style={LogoStyle} source={types[type].image}/>
+	 <Title>{types[type].text}</Title>
+	 <TextInput 
+	 style={InputStyle}
+	 value={token}
+	 error={error}
+	 ref={inputRef}
+	 onChangeText={text=>{
+		setToken(text)
+		setError(null)
+	 }}
+	 {...textInputOptions}/>
+	 <HelperText
+	 type='error'
+	 style={HelperStyle}
+	 visible={error}>{error}</HelperText>
+	<Button mode="contained" onPress={login}>Log In</Button>
+ </Container>
+ );
+}

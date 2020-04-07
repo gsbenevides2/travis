@@ -1,5 +1,9 @@
 import React from 'react'
-import {RefreshControl,DeviceEventEmitter} from 'react-native'
+import {
+ RefreshControl,
+ DeviceEventEmitter,
+ StatusBar
+} from 'react-native'
 import {Container,List,Image,Text} from './styles'
 import RepositoryItem from '~/components/repositoryItem'
 
@@ -75,8 +79,8 @@ export default function(props){
 	const unsubscribeToBlur = props
 	 .navigation
 	 .addListener('blur', () => {
-		 if(source){
-			source.cancel('Canceled')
+		if(source){
+		 source.cancel('Canceled')
 		}
 	 });
 
@@ -90,6 +94,10 @@ export default function(props){
  if(repos){
 	if(repos.length){
 	 return(
+		<>
+		<StatusBar 
+		backgroundColor='#ffffff'
+		barStyle='dark-content'/>
 		<List
 		refreshControl={
 		 <RefreshControl refreshing={loading} onRefresh={loadData}/>}
@@ -97,11 +105,15 @@ export default function(props){
 		 renderItem={({item})=>(
 			<RepositoryItem onPress={()=>handleRepositoryClick(item.id)} data={item}/>)}
 			keyExtractor={item => item.id.toString()}/>
+		</>
 	 )
 	}
 	else{
 	 return (
 		<Container>
+		 <StatusBar 
+		 backgroundColor='#ffffff'
+		 barStyle='dark-content'/>
 		 <Image source={emptyImage}/>
 		 <Text>No active repositories</Text>
 		</Container>
@@ -111,6 +123,9 @@ export default function(props){
  else{
 	return (
 	 <Container>
+		<StatusBar 
+		backgroundColor='#ffffff'
+		barStyle='dark-content'/>
 		<Image source={loadingImage}/>
 		<Text>Loading...</Text>
 	 </Container>

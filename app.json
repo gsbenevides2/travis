@@ -3,8 +3,7 @@
     "name": "Travis CI",
     "slug": "travis",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
-		"primaryColor":"#ffffff",
+    "primaryColor": "#ffffff",
     "platforms": [
       "ios",
       "android"
@@ -31,9 +30,9 @@
     "android": {
       "package": "com.gsbenevides2.travis",
       "versionCode": 1,
-			"adaptiveIcon":{
-			 "foregroundImage":"./assets/travis_org_logo.png"
-			}
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/travis_org_logo.png"
+      }
     }
   }
 }

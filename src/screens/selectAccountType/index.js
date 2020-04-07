@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView,Image} from 'react-native';
+import {ScrollView,Image,StatusBar} from 'react-native';
 import {AccountType,Info,Title,Url,LogoStyle} from './styles';
 
 const TravisOrgLogo = require('../../../assets/travis_org_logo.png')
@@ -11,6 +11,9 @@ export default function(props) {
  }
   return (
 	<ScrollView>
+	 <StatusBar 
+	 backgroundColor='#ffffff'
+	 barStyle='dark-content'/>
 	 <AccountType onPress={()=>{
 		to('org')
 	 }}>

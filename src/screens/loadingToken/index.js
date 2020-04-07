@@ -1,5 +1,6 @@
 import React from 'react';
 import {CommonActions} from '@react-navigation/native';
+import {StatusBar} from 'react-native';
 import api from '~/services/api'
 import {Container,Spinner} from './styles'
 
@@ -41,6 +42,9 @@ export default function(props){
  },[])
  return (
 	<Container>
+		<StatusBar 
+		backgroundColor='#ffffff'
+		barStyle='dark-content'/>
 	 <Spinner />
 	</Container>	
  )

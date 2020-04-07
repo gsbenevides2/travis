@@ -1,7 +1,8 @@
 import React from 'react'
 import {
  RefreshControl,
- DeviceEventEmitter
+ DeviceEventEmitter,
+ StatusBar
 } from 'react-native'
 import {IconButton} from 'react-native-paper'
 
@@ -13,6 +14,8 @@ import api from '~/services/api'
 
 import {openBrowserAsync} from 'expo-web-browser';
 export default function Repository(props){
+ const [statusBarStyle,setStatusBarStyle] = 
+	React.useState({style:'dark-content',color:'#ffffff'})
  const [data,setData] = React.useState(null)
  const [loading,setLoading] = React.useState(false)
  const {id} = props.route.params
@@ -35,6 +38,10 @@ export default function Repository(props){
 		'started'
 	 ]
 
+	 setStatusBarStyle({
+		style:'light-content',
+		color:states.colors[response.data.current_build.state]
+		})
 	 setData(response.data)
 	 props.navigation.setOptions({
 		title:response.data.slug,
@@ -95,6 +102,9 @@ export default function Repository(props){
 	 <RefreshControl 
 	 refreshing={loading} 
 	 onRefresh={loadData}/>}>
+	 <StatusBar 
+	 backgroundColor={statusBarStyle.color}
+	 barStyle={statusBarStyle.style}/>
 	 { data && 
 		<>
 		<CurrentBuild data={data.current_build}/>

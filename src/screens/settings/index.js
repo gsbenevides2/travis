@@ -2,6 +2,7 @@ import React from 'react';
 import { CommonActions} from '@react-navigation/native';
 import Constants from 'expo-constants'
 import {openBrowserAsync} from 'expo-web-browser';
+import {StatusBar} from 'react-native'
 import {
  List,
  Portal,
@@ -26,6 +27,7 @@ import api from '~/services/api'
 
 export default function SettingsScreen(props){
  const [data,setData] = React.useState(null)
+ const [color,setColor] = React.useState('#ffffff')
  const [showDialog, setShowDialog] =  React.useState(false)
  function loadData(){
 	api.get('/user')
@@ -58,6 +60,9 @@ export default function SettingsScreen(props){
  if(data){
 	return(
 	 <Container>
+	 <StatusBar 
+	 backgroundColor={color}
+	 barStyle='dark-content'/>
 		<UserData>
 		 <Avatar
 		 source={{uri:data.avatar_url}}/>
@@ -71,7 +76,10 @@ export default function SettingsScreen(props){
 		title='Sign Out'
 		description='Click to sign out of your Travis account.'
 		left={props=>(<List.Icon {...props} icon='logout-variant'/>)}
-		onPress={()=>setShowDialog(true)}/>
+		onPress={()=>{
+		 setColor('rgba(0,0,0,0.5)')
+		 setShowDialog(true)
+		}}/>
 		<List.Item
 		title='Help'
 		description='Help Wiki.'
@@ -83,14 +91,21 @@ export default function SettingsScreen(props){
 		</AppData>
 		<Portal>
 		 <Dialog 
-		 onDismiss={()=>setShowDialog(false)}
+		 onDismiss={()=>{
+			setColor('#ffffff')
+			setShowDialog(false)
+		 }}
 		 visible={showDialog}>
 			<Dialog.Title>Are you sure?</Dialog.Title>
 			<Dialog.Content>
 			 <Paragraph>You will be signed out of your account! Are you sure you want to continue?</Paragraph>
 			</Dialog.Content>
 			<Dialog.Actions>
-			 <Button onPress={()=>setShowDialog(false)}>Cancel</Button>
+			 <Button 
+			 onPress={()=>{
+				setColor('#ffffff')
+				setShowDialog(false)
+			 }}>Cancel</Button>
 			 <Button onPress={signOut}>Ok</Button>
 			</Dialog.Actions>
 		 </Dialog>
