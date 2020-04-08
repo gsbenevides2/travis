@@ -1,13 +1,13 @@
 import styled from 'styled-components/native'
-import {ActivityIndicator} from 'react-native-paper'
 
 export const Container = styled.View`
  flex:1;
- alignItems:center;
- justifyContent:center;
  backgroundColor:#ffffff;
 `
 
-export const Spinner = styled(ActivityIndicator).attrs({
- size:120
-})``
+export const Image = styled.Image`
+ flex:1;
+ resizeMode:contain;
+ width:undefined;
+ height:undefined;
+`

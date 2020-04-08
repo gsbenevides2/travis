@@ -2,7 +2,8 @@ import React from 'react';
 import {CommonActions} from '@react-navigation/native';
 import {StatusBar} from 'react-native';
 import api from '~/services/api'
-import {Container,Spinner} from './styles'
+import {Container,Image} from './styles'
+import {SplashScreen} from 'expo'
 
 export default function(props){
 
@@ -10,7 +11,7 @@ export default function(props){
 	async function loadCredentials(){
 	 const {type,token} = await api.getAuthData()
 	 if(token && type){
-	 api.reauthenticate() 
+		api.reauthenticate() 
 		 .then(()=>{
 			props.navigation
 			 .dispatch(CommonActions.reset(
@@ -42,11 +43,13 @@ export default function(props){
  },[])
  return (
 	<Container>
-		<StatusBar 
-		backgroundColor='#ffffff'
-		barStyle='dark-content'/>
-	 <Spinner />
-	</Container>	
+	 <Image
+	 source={require('../../../assets/splash.png')}
+	 onLoadEnd={()=>{
+		SplashScreen.hide()
+	 }}
+	 fadeDuration={0}/>
+	</Container>
  )
 }
 
