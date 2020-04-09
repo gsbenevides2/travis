@@ -1,19 +1,24 @@
 import React from 'react';
-import {ScrollView,Image,StatusBar} from 'react-native';
-import {AccountType,Info,Title,Url,LogoStyle} from './styles';
+import {Image,StatusBar} from 'react-native';
+import {View,AccountType,Info,Title,Url,LogoStyle} from './styles';
 
 const TravisOrgLogo = require('../../../assets/travis_org_logo.png')
 const TravisComLogo = require('../../../assets/travis_com_logo.png')
+import {connect} from 'react-redux'
 
-export default function(props) {
+export default connect(state=>({
+ theme:state.theme
+}))(props=>{
+ const {theme} = props
+ const themeData = theme.data[theme.selected]
  function to(type){
 	props.navigation.navigate('login',{type})
  }
   return (
-	<ScrollView>
+	<View>
 	 <StatusBar 
-	 backgroundColor='#ffffff'
-	 barStyle='dark-content'/>
+		backgroundColor={themeData.color}
+		barStyle={`${theme.selected==='light'?'dark':'light'}-content`}/>
 	 <AccountType onPress={()=>{
 		to('org')
 	 }}>
@@ -32,6 +37,6 @@ export default function(props) {
 	 <Url>https://travis-ci.com</Url>
 	</Info>
  </AccountType>
-</ScrollView>
+</View>
  );
-}
+})

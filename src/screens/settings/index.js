@@ -24,8 +24,15 @@ import {
 } from './styles'
 
 import api from '~/services/api'
+import themeRoot from '~/theme'
+import {connect} from 'react-redux'
 
-export default function SettingsScreen(props){
+export default connect(state=>({
+ theme:state.theme
+}))(props=>{
+ console.log(themeRoot.setTheme)
+ const {theme} = props
+ const themeData = theme.data[theme.selected]
  const [data,setData] = React.useState(null)
  const [color,setColor] = React.useState('#ffffff')
  const [showDialog, setShowDialog] =  React.useState(false)
@@ -61,8 +68,8 @@ export default function SettingsScreen(props){
 	return(
 	 <Container>
 	 <StatusBar 
-	 backgroundColor={color}
-	 barStyle='dark-content'/>
+		backgroundColor={themeData.color}
+		barStyle={`${theme.selected==='light'?'dark':'light'}-content`}/>
 		<UserData>
 		 <Avatar
 		 source={{uri:data.avatar_url}}/>
@@ -72,6 +79,13 @@ export default function SettingsScreen(props){
 			<Text>travis-ci.{data.type}</Text>
 		 </TextData>
 		</UserData>
+		<List.Item
+		title={`${theme.selected === 'light'? 'Dark': 'Light'} Theme`}
+		description={`Set ${theme.selected ==='light'?'dark':'light'} theme in app.`}
+		left={props=>(<List.Icon {...props} icon='theme-light-dark'/>)}
+		onPress={()=>{
+		 props.dispatch(themeRoot.setTheme(theme.selected ==='light'?'dark':'light'))
+		}}/>
 		<List.Item
 		title='Sign Out'
 		description='Click to sign out of your Travis account.'
@@ -86,7 +100,7 @@ export default function SettingsScreen(props){
 		left={props=>(<List.Icon {...props} icon='help-circle'/>)}
 	  onPress={openWiki}/>
 		<AppData>
-		 <OpenSource />
+		 <OpenSource color={themeData.text}/>
 		 <Version>Version {Constants.manifest.version}</Version>
 		</AppData>
 		<Portal>
@@ -114,6 +128,12 @@ export default function SettingsScreen(props){
 	)
  }
  else{
-	return <Container/>
+	return(
+	 <Container>
+	 <StatusBar 
+		backgroundColor={themeData.color}
+		barStyle={`${theme.selected==='light'?'dark':'light'}-content`}/>
+	 </Container>
+	)
  }
-}
+})

@@ -30,8 +30,14 @@ const textInputOptions = {
  autoCompleteType:'off',
  autoCorrect:false
 }
+import {connect} from 'react-redux'
 
-export default function(props) {
+export default connect(state=>({
+ theme:state.theme
+}))(props=>{
+ const {theme} = props
+ const themeData = theme.data[theme.selected]
+
  const inputRef = React.useRef(null)
  const [token,setToken] = React.useState('')
  const [error,setError] = React.useState(null)
@@ -59,9 +65,9 @@ export default function(props) {
 
  return (
 	<Container behavior="padding" enabled>
-	 <StatusBar 
-	 backgroundColor='#ffffff'
-	 barStyle='dark-content'/>
+		<StatusBar 
+		backgroundColor={themeData.color}
+		barStyle={`${theme.selected==='light'?'dark':'light'}-content`}/>
 	 <Image style={LogoStyle} source={types[type].image}/>
 	 <Title>{types[type].text}</Title>
 	 <TextInput 
@@ -81,4 +87,4 @@ export default function(props) {
 	<Button mode="contained" onPress={login}>Log In</Button>
  </Container>
  );
-}
+})

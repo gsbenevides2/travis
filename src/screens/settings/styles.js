@@ -5,6 +5,7 @@ import {openBrowserAsync} from 'expo-web-browser';
 
 export const Container = styled.View`
  flex:1;
+ backgroundColor:${props=>props.theme.bg};
 `
 
 export const  UserData =  styled.View`
@@ -22,21 +23,25 @@ export const  TextData = styled.View`
 `
 export const  BoldText = styled.Text`
  fontWeight:700;
+ color:${props=>props.theme.text};
  fontSize:20px;
 `
-export const  Text = styled.Text``
+export const  Text = styled.Text`
+ color:${props=>props.theme.text};
+`
 export const AppData = styled.View`
  flex:1;
  alignItems:center;
  justifyContent:flex-end;
  marginBottom:12px;
 `
-export const OpenSource = ()=>{
+export const OpenSource = (props)=>{
  const Container = styled.TouchableOpacity`
 	flexDirection:row;
 	alignItems:center;
  `
  const Text = styled.Text`
+ color:${props.color};
 	marginLeft:2px;
  `
  const open = ()=>{
@@ -46,9 +51,12 @@ export const OpenSource = ()=>{
 	<Container
 	onPress={open}>
 	 <AntDesign 
+	 color={props.color}
 	 name='github'/>
 	 <Text>Open-Source Project ♥️</Text>
 	</Container>
  )
 }
-export const  Version = styled.Text``
+export const  Version = styled.Text`
+ color:${props=>props.theme.text};
+`

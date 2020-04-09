@@ -5,17 +5,25 @@ import {
  StatusBar
 } from 'react-native'
 import {IconButton} from 'react-native-paper'
+import {openBrowserAsync} from 'expo-web-browser';
 
 import CurrentBuild from './components/CurrentBuild'
 import JobView from './components/LogView'
 import {Container} from './styles'
 import {states} from '~/utils'
 import api from '~/services/api'
+import {connect} from 'react-redux'
 
-import {openBrowserAsync} from 'expo-web-browser';
-export default function Repository(props){
+export default connect(state=>({
+ theme:state.theme
+}))(props=>{
+ const {theme} = props
+ const themeData = theme.data[theme.selected]
  const [statusBarStyle,setStatusBarStyle] = 
-	React.useState({style:'dark-content',color:'#ffffff'})
+	React.useState({
+	 style:`${theme.selected==='light'?'dark':'light'}-content`,
+	 color:themeData.color
+	})
  const [data,setData] = React.useState(null)
  const [loading,setLoading] = React.useState(false)
  const {id} = props.route.params
@@ -113,5 +121,5 @@ export default function Repository(props){
 	 }
 	 </Container>
  )
-}
+})
 

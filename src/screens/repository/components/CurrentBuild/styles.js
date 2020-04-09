@@ -5,7 +5,7 @@ import {
 import styled from 'styled-components'
 
 export const Container = styled.View`
- backgroundColor:#fff;
+ backgroundColor:${props=>props.theme.color};
  borderLeftWidth:10px;
  borderLeftColor:${props=>props.color};
  paddingTop:10px;
@@ -41,9 +41,10 @@ export const SuperIonicon = styled(Ionicons)
 	color:props.color
  }))``
 export const Ionicon = styled(Ionicons)
- .attrs({
+ .attrs(props=>({
+	color:props.theme.text,
 	size:20
- })``
+ }))``
 
 export const BoldInfo = styled.Text`
  color:${props=>props.color};
@@ -55,6 +56,7 @@ export const SuperText = styled.Text`
  marginLeft:10px;
 `
 export const Text = styled.Text`
+ color:${props=>props.theme.text};
  marginLeft:5px;
 `
 export const Avatar = styled.Image`

@@ -1,9 +1,7 @@
 import React from 'react';
 import { Drawer ,Title} from 'react-native-paper';
 
-import {
-  DrawerContentScrollView,
-} from '@react-navigation/drawer';
+import {Container} from './styles';
 
 export default function DrawerContent(props){
  const {state} = props
@@ -15,7 +13,7 @@ export default function DrawerContent(props){
 
  const {routes} = state
  return (
-	<DrawerContentScrollView>
+	<Container>
 	 <Title style={{marginLeft:10}}>Travis CI</Title>
 	 {
 	 routes.map(route=>(
@@ -29,6 +27,6 @@ export default function DrawerContent(props){
 		icon={icons[route.name]}
 		label={route.name} />
 	 ))
-	}</DrawerContentScrollView>
+	}</Container>
  )
 }

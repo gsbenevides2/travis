@@ -3,12 +3,13 @@ import styled from 'styled-components'
 import { AntDesign,MaterialCommunityIcons} from '@expo/vector-icons'
 
 export const TextTitle = styled.Text`
+ color:${props=>props.theme.text};
  fontWeight:600;
  fontSize:20px;
 `
 
 export const Container = styled.View`
- backgroundColor:#fff;
+ backgroundColor:${props=>props.theme.color};
  marginTop:10px;
  padding:5px;
 `
@@ -19,7 +20,7 @@ export const Line = props=>{
  const Text = styled.Text`
 	marginLeft:10px;
 	fontWeight:${props.bold?'bold':'normal'};
-	color:${props.color || '#000'}
+	color:${p=>props.color || p.theme.text}
  `
  return (
 	<Container>

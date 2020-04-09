@@ -2,7 +2,7 @@ import styled from 'styled-components/native'
 
 export const Container = styled.View`
  flex:1;
- backgroundColor:#ffffff;
+ backgroundColor:${props=>props.theme.color};
 `
 
 export const Image = styled.Image`

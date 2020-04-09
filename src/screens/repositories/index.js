@@ -5,15 +5,19 @@ import {
  StatusBar
 } from 'react-native'
 import {Container,List,Image,Text} from './styles'
-import RepositoryItem from '~/components/repositoryItem'
+import RepositoryItem from './components/repositoryItem'
 
 import api from '~/services/api'
 
 import emptyImage from '~/assents/empty.png'
 import loadingImage from '~/assents/loading.png'
+import {connect} from 'react-redux'
 
-
-export default function(props){
+export default connect(state=>({
+ theme:state.theme
+}))(props=>{
+ const {theme} = props
+ const themeData = theme.data[theme.selected]
  const [repos,setRepos] = React.useState(null)
  const [loading,setLoad] = React.useState(true)
  const [source,setSource] = React.useState(null)
@@ -97,8 +101,8 @@ export default function(props){
 	 return(
 		<>
 		<StatusBar 
-		backgroundColor='#ffffff'
-		barStyle='dark-content'/>
+		backgroundColor={themeData.color}
+		barStyle={`${theme.selected==='light'?'dark':'light'}-content`}/>
 		<List
 		refreshControl={
 		 <RefreshControl refreshing={loading} onRefresh={loadData}/>}
@@ -113,8 +117,8 @@ export default function(props){
 	 return (
 		<Container>
 		 <StatusBar 
-		 backgroundColor='#ffffff'
-		 barStyle='dark-content'/>
+		 backgroundColor={themeData.color}
+		 barStyle={`${theme.selected==='light'?'dark':'light'}-content`}/>
 		 <Image source={emptyImage}/>
 		 <Text>No active repositories</Text>
 		</Container>
@@ -125,11 +129,11 @@ export default function(props){
 	return (
 	 <Container>
 		<StatusBar 
-		backgroundColor='#ffffff'
-		barStyle='dark-content'/>
+		 backgroundColor={themeData.color}
+		 barStyle={`${theme.selected==='light'?'dark':'light'}-content`}/>
 		<Image source={loadingImage}/>
 		<Text>Loading...</Text>
 	 </Container>
 	)
  }
-}
+})

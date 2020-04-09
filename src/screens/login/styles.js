@@ -4,9 +4,11 @@ export const Container = styled.KeyboardAvoidingView`
  flex:1;
  justifyContent:center;
  alignItems:center;
+ backgroundColor:${props=>props.theme.bg};
 `
 export const Title = styled.Text`
  fontSize:25px;
+ color:${props=>props.theme.text};
  fontWeight:bold;
  marginBottom:10px;
 `

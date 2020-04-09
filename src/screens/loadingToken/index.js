@@ -3,9 +3,13 @@ import {CommonActions} from '@react-navigation/native';
 import {StatusBar} from 'react-native';
 import api from '~/services/api'
 import {Container,Image} from './styles'
-import {SplashScreen} from 'expo'
+import {connect} from 'react-redux'
 
-export default function(props){
+export default connect(state=>({
+ theme:state.theme
+}))(props=>{
+ const {theme} = props
+ const themeData = theme.data[theme.selected]
 
  React.useEffect(()=>{
 	async function loadCredentials(){
@@ -43,13 +47,13 @@ export default function(props){
  },[])
  return (
 	<Container>
+	 <StatusBar 
+	 backgroundColor={themeData.color}
+	 barStyle={`${theme.selected==='light'?'dark':'light'}-content`}/>
 	 <Image
 	 source={require('../../../assets/splash.png')}
-	 onLoadEnd={()=>{
-		SplashScreen.hide()
-	 }}
 	 fadeDuration={0}/>
 	</Container>
  )
-}
+})
 

@@ -19,59 +19,77 @@ import {openBrowserAsync} from 'expo-web-browser';
 
 const Drawer = createDrawerNavigator()
 const Stack = createStackNavigator()
+import {connect} from 'react-redux'
 
-export default function(){
+export default connect(state=>({
+ theme:state.theme
+}))(props=>{
+ const {theme} = props
+ const themeData = theme.data[theme.selected]
  return(
 	<NavigationContainer>
-	 <Stack.Navigator>
-		<Stack.Screen
-		name='loadingToken' 
-		options={{
-		 headerShown:false,
-		 title:'Select your account type:'
-		}} 
-		component={LoadingTokenScreen}/>
-		<Stack.Screen
-		name='selectAccountType' 
-		options={{
-		 title:'Select your account type:'
-		}} 
-		component={SelectAccountTypeScreen}/>
-		<Stack.Screen
-		name='login' 
-		options={{
-		 title:'Log in',
-		 headerRight:()=>(
-			<IconButton 
-			icon='help-circle-outline'
-			onPress={()=>{
-			 openBrowserAsync('https://github.com/gsbenevides2/travis/wiki/How-to-get-the-API-token%3F')
-			}}
-			size={25}		
-		 />
-		 )
-		}}
-		component={LoginScreen}/>
-		<Stack.Screen
-		options={{
-		 headerShown:false
-		}}
-		name='app'>
-		{()=>(
-		 <Drawer.Navigator
-		 drawerContent={(props)=>(<DrawerContent {...props}/>)}
-		 drawerContentOptions={{
-			activeTintColor:'#038955'
-		 }}>
+	 <Stack.Navigator
+	 screenOptions={{
+		headerStyle: {
+		 backgroundColor:themeData.color,
+		},
+		headerTintColor:themeData.text
+	 }}>
+	 <Stack.Screen
+	 name='loadingToken' 
+	 options={{
+		headerShown:false,
+		title:'Select your account type:'
+	 }} 
+	 component={LoadingTokenScreen}/>
+	 <Stack.Screen
+	 name='selectAccountType' 
+	 options={{
+		title:'Select your account type:'
+	 }} 
+	 component={SelectAccountTypeScreen}/>
+	 <Stack.Screen
+	 name='login' 
+	 options={{
+		title:'Log in',
+		headerRight:()=>(
+		 <IconButton 
+		 color={themeData.text}
+		 icon='help-circle-outline'
+		 onPress={()=>{
+			openBrowserAsync('https://github.com/gsbenevides2/travis/wiki/How-to-get-the-API-token%3F')
+		 }}
+		 size={25}		
+		/>
+		)
+	 }}
+		 component={LoginScreen}/>
+		 <Stack.Screen
+		 options={{
+			headerShown:false
+		 }}
+		 name='app'>
+		 {()=>(
+			<Drawer.Navigator
+			drawerContent={(props)=>(<DrawerContent {...props}/>)}
+			drawerContentOptions={{
+			 activeTintColor:'#038955'
+			}}>
 			<Drawer.Screen name='Repositories'>
 			 {()=>(
-				<Stack.Navigator>
-				 <Stack.Screen
-				 name='repositories' 
-				 options={({navigation})=>({
-					title:'My Repositories',
-					headerLeft: ()=>(<DrawerButton color="#000" navigation={navigation}/>)
-				 })} 
+				<Stack.Navigator
+				screenOptions={{
+				 headerStyle: {
+					backgroundColor: themeData.color,
+				 },
+				 headerTintColor:themeData.text
+				}}>
+				<Stack.Screen
+				name='repositories' 
+				options={({navigation})=>({
+				 title:'My Repositories',
+				 headerLeft: ()=>(<DrawerButton color={themeData.text} navigation={navigation}/>)
+				})} 
 				 component={RepositoriesScreen}/>
 				 <Stack.Screen
 				 name='repository' 
@@ -84,22 +102,28 @@ export default function(){
 			 </Drawer.Screen>
 			 <Drawer.Screen name='Settings'>
 				{()=>(
-				 <Stack.Navigator>
-					<Stack.Screen
-					name='settings' 
-					options={({navigation})=>({
-					 title:'Settings',
-					headerLeft: ()=>(<DrawerButton color="#000" navigation={navigation}/>)
-					})} 
+				 <Stack.Navigator
+				 screenOptions={{
+					headerStyle: {
+					 backgroundColor: themeData.color,
+					},
+					headerTintColor:themeData.text
+				 }}>
+				 <Stack.Screen
+				 name='settings' 
+				 options={({navigation})=>({
+					title:'Settings',
+					headerLeft: ()=>(<DrawerButton color={themeData.text} navigation={navigation}/>)
+				 })} 
 					component={SettingsScreen}/>
 				 </Stack.Navigator>
 				)}
 				</Drawer.Screen>
 
 			 </Drawer.Navigator>
-		)}
+		 )}
 			</Stack.Screen>
 		 </Stack.Navigator>
 		</NavigationContainer>
  )
-}
+})

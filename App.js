@@ -1,25 +1,33 @@
 import React from 'react';
-import { DefaultTheme,Provider as PaperProvider } from 'react-native-paper';
+import {Provider as PaperProvider } from 'react-native-paper';
 import Routes from './src/routes';
 
-import {SplashScreen} from 'expo'
-SplashScreen.preventAutoHide()
+import {ThemeProvider} from 'styled-components'
 
-const theme = {
- ...DefaultTheme,
- roundness: 2,
- colors: {
-	...DefaultTheme.colors,
-	primary: '#02623D',
-	accent: '#05C47A',
- },
-};
+import { Provider,connect } from 'react-redux'
+import store from './src/store'	
+import theme from './src/theme'	
+
+const RestOfApp = connect(store=>({
+ theme:store.theme
+})
+)(props=>{
+
+ return (
+	<ThemeProvider theme={theme.styled[props.theme.selected]}>
+	 <PaperProvider theme={theme.paper[props.theme.selected]}>
+		<Routes />
+	 </PaperProvider>
+	</ThemeProvider>
+ )
+})
+
+
 export default function App() {
 
  return (
-	 <PaperProvider theme={theme}>
-		<Routes />
-	 </PaperProvider>
-
+	<Provider store={store}>
+	 <RestOfApp />
+	</Provider>
  );
 }
