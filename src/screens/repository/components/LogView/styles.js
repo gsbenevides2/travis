@@ -17,6 +17,10 @@ export const Line = props=>{
  const Container = styled.View`
 	flexDirection:row;
  `
+ const Icon = styled(MaterialCommunityIcons).attrs(p=>({
+	size:20,
+	color:props.color||p.theme.text
+ }))``
  const Text = styled.Text`
 	marginLeft:10px;
 	fontWeight:${props.bold?'bold':'normal'};
@@ -24,10 +28,8 @@ export const Line = props=>{
  `
  return (
 	<Container>
-	 <MaterialCommunityIcons
-	 name={props.icon}
-	 size={20}
-	 color={props.color || '#000'}/>
+	 <Icon
+	 name={props.icon}/>
 	 <Text>{props.label}</Text>
 	</Container>
  )
@@ -57,7 +59,8 @@ export const ViewLogButton = props=>{
  `
 
  return (
-	<Container>
+	<Container
+	onPress={props.onPress}>
 	 <AntDesign 
 	 name='eyeo'
 	 size={20}
@@ -70,7 +73,7 @@ export const RestartButton = props=>{
  const Container = styled.TouchableOpacity`
 	borderWidth:1px;
 	borderColor:#8A9597;
-  padding:5px;
+	padding:5px;
 	justifyContent:center;
 	flexDirection:row;
 	borderRadius:20px;

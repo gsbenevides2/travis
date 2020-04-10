@@ -6,7 +6,7 @@ import {ThemeProvider} from 'styled-components'
 
 import { Provider,connect } from 'react-redux'
 import store from './src/store'	
-import theme from './src/theme'	
+import * as theme from './src/theme'	
 
 const RestOfApp = connect(store=>({
  theme:store.theme

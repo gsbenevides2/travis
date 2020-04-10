@@ -80,6 +80,9 @@ export default connect(state=>({
 	 })
  }
 
+ function jobViewOpen(jobId){
+	props.navigation.navigate('logView',{jobId})
+ }
  React.useEffect(()=>{
 	async function load(){
 	 await api.setAuthData()
@@ -116,7 +119,9 @@ export default connect(state=>({
 	 { data && 
 		<>
 		<CurrentBuild data={data.current_build}/>
-		<JobView data={data.current_build.jobs} />
+		 <JobView 
+		 jobLogOpen={jobViewOpen}
+		 data={data.current_build.jobs} />
 		</>
 	 }
 	 </Container>

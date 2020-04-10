@@ -4,10 +4,12 @@ import {createDrawerNavigator} from '@react-navigation/drawer'
 import {createStackNavigator} from '@react-navigation/stack'
 
 import LoadingTokenScreen from './screens/loadingToken'
+import InternetErrorScreen from './screens/internetError'
 import SelectAccountTypeScreen from './screens/selectAccountType'
 import LoginScreen from './screens/login';
 import RepositoriesScreen from './screens/repositories';
 import RepositoryScreen from './screens/repository';
+import LogViewScreen from './screens/logView';
 
 import SettingsScreen from './screens/settings';
 
@@ -38,10 +40,15 @@ export default connect(state=>({
 	 <Stack.Screen
 	 name='loadingToken' 
 	 options={{
-		headerShown:false,
-		title:'Select your account type:'
+		headerShown:false
 	 }} 
 	 component={LoadingTokenScreen}/>
+	 <Stack.Screen
+	 name='internetError' 
+	 options={{
+		headerShown:false
+	 }} 
+	 component={InternetErrorScreen}/>
 	 <Stack.Screen
 	 name='selectAccountType' 
 	 options={{
@@ -97,6 +104,17 @@ export default connect(state=>({
 					title:'Repository'
 				 }} 
 				 component={RepositoryScreen}/>
+				 <Stack.Screen
+				 name='logView' 
+				 options={{
+					title:'View Log',
+					headerStyle: {
+					 backgroundColor:'#000000'
+					},
+					headerTintColor:'#ffffff'
+
+				 }} 
+				 component={LogViewScreen}/>
 				</Stack.Navigator>
 			 )}
 			 </Drawer.Screen>

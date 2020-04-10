@@ -70,15 +70,16 @@ function Job(props){
 		icon='timer'
 		label={formatedDuration}/>
 	 </Content>
-	 <ButtonArea>
-		{/*
-		 <ViewLogButton>View Log</ViewLogButton>
-		 */}
-		 <RestartButton 
-		 icon={states.running.includes(data.state)? 'close':'reload1'}
-		 onPress={restartJob}/>
-		</ButtonArea>
-	 </Container>
+	 <ButtonArea>		
+		<ViewLogButton onPress={()=>{
+		 props.jobLogOpen(data.id)
+		}}>View Log</ViewLogButton>
+
+		<RestartButton 
+		icon={states.running.includes(data.state)? 'close':'reload1'}
+		onPress={restartJob}/>
+	 </ButtonArea>
+	</Container>
  )
 }
 
@@ -90,7 +91,9 @@ export default function JobView(props){
 	<>
 	<TextTitle>Build Jobs</TextTitle>
 	{props.data.map(job=>(
-	 <Job data={job} key={job.id}/>
+	 <Job 
+	 jobLogOpen={props.jobLogOpen}
+	 data={job} key={job.id}/>
 	))}
 	</>
  )

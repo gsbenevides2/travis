@@ -1,8 +1,8 @@
-import theme from './theme'
+import {styled} from './theme'
 const initialState = {
  theme:{
 	selected:'light',
-	data:theme.styled
+	data:styled
  }
 }
 

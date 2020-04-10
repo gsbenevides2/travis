@@ -24,13 +24,12 @@ import {
 } from './styles'
 
 import api from '~/services/api'
-import themeRoot from '~/theme'
+import {setTheme} from '~/theme'
 import {connect} from 'react-redux'
 
 export default connect(state=>({
  theme:state.theme
 }))(props=>{
- console.log(themeRoot.setTheme)
  const {theme} = props
  const themeData = theme.data[theme.selected]
  const [data,setData] = React.useState(null)
@@ -84,7 +83,7 @@ export default connect(state=>({
 		description={`Set ${theme.selected ==='light'?'dark':'light'} theme in app.`}
 		left={props=>(<List.Icon {...props} icon='theme-light-dark'/>)}
 		onPress={()=>{
-		 props.dispatch(themeRoot.setTheme(theme.selected ==='light'?'dark':'light'))
+		 props.dispatch(setTheme(theme.selected ==='light'?'dark':'light'))
 		}}/>
 		<List.Item
 		title='Sign Out'
