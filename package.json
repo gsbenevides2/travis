@@ -13,7 +13,7 @@
     "@react-navigation/native": "^5.0.9",
     "@react-navigation/stack": "^5.1.1",
     "ansicolor": "^1.1.93",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "expo": "^37.0.0",
     "expo-constants": "~9.0.0",
     "expo-network": "~2.1.0",
